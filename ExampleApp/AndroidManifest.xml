@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.udinic.syncadapter_example_ap"
+          android:versionCode="1"
+          android:versionName="1.0">
+
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17"/>
+    <application
+            android:label="@string/app_name"
+            android:icon="@drawable/ic_launcher">
+        <activity android:name=".Main1">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".Testing">
+            <intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
+        <!-- W/O that, we'll get: "Failed to find provider info for com.udinic.tvshows.provider" -->
+        <provider android:authorities="com.udinic.tvshows.provider"
+                  android:name="com.udinic.sync_adapter_example.db.TvShowsContentProvider"
+                  android:exported="false"/>
+
+        <!-- Authenticator related activities and service needs to be declared here in order for the app to recognize them-->
+        <activity android:name="com.udinic.sync_adapter_example.authentication.AuthenticatorActivity" android:label="@string/login_label"/>
+        <activity android:name="com.udinic.sync_adapter_example.authentication.SignUpActivity" android:label="@string/signup_title"/>
+
+        <service android:name="com.udinic.sync_adapter_example.authentication.UdinicAuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data android:name="android.accounts.AccountAuthenticator"
+                       android:resource="@xml/authenticator" />
+        </service>
+
+        <service
+                android:name="com.udinic.sync_adapter_example.syncadapter.UdinicSyncService"
+                android:exported="true">
+            <intent-filter>
+                <action
+                        android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                    android:name="android.content.SyncAdapter"
+                    android:resource="@xml/sync_adapter" />
+            <meta-data
+                    android:name="android.provider.CONTACTS_STRUCTURE"
+                    android:resource="@xml/contacts" />
+
+        </service>
+
+    </application>
+
+    <!-- client -->
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+
+    <!-- Authenticator -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+
+    <!-- Sync Adapter -->
+    <uses-permission
+            android:name="android.permission.READ_SYNC_STATS" />
+    <uses-permission
+            android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission
+            android:name="android.permission.WRITE_SYNC_SETTINGS" />
+
+
+</manifest>
