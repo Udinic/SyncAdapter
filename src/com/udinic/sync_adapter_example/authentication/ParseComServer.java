@@ -3,8 +3,8 @@ package com.udinic.sync_adapter_example.authentication;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.udinic.sync_adapter_example.db.dao.TvShow;
-import com.udinic.sync_adapter_example.db.dao.User;
+import com.udinic.syncadapter_example_app.db.dao.TvShow;
+import com.udinic.syncadapter_example_app.db.dao.User;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

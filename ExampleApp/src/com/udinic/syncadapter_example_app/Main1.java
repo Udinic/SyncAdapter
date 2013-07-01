@@ -1,4 +1,4 @@
-package com.udinic.syncadapter_example_ap;
+package com.udinic.syncadapter_example_app;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;

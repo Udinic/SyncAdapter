@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.udinic.sync_adapter_example.syncadapter;
+package com.udinic.syncadapter_example_app.syncadapter;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -30,8 +30,8 @@ import android.util.Log;
 
 import com.udinic.sync_adapter_example.authentication.AccountGeneral;
 import com.udinic.sync_adapter_example.authentication.ParseComServer;
-import com.udinic.sync_adapter_example.db.TvShowsContentProvider;
-import com.udinic.sync_adapter_example.db.dao.TvShow;
+import com.udinic.syncadapter_example_app.db.TvShowsContract;
+import com.udinic.syncadapter_example_app.db.dao.TvShow;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             // Get shows from local
             ArrayList<TvShow> localTvShows = new ArrayList<TvShow>();
-            Cursor curTvShows = getContext().getContentResolver().query(TvShowsContentProvider.CONTENT_URI, null, null, null, null);
+            Cursor curTvShows = getContext().getContentResolver().query(TvShowsContract.CONTENT_URI, null, null, null, null);
             if (curTvShows != null) {
                 while (curTvShows.moveToNext()) {
                     localTvShows.add(TvShow.fromCursor(curTvShows));
@@ -115,7 +115,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 Log.d("udinic", "Remote -> Local [" + localTvShow.name + "]");
                 showsToLocalValues[i++] = localTvShow.getContentValues();
             }
-            getContext().getContentResolver().bulkInsert(TvShowsContentProvider.CONTENT_URI, showsToLocalValues);
+            getContext().getContentResolver().bulkInsert(TvShowsContract.CONTENT_URI, showsToLocalValues);
 
         } catch (OperationCanceledException e) {
             e.printStackTrace();

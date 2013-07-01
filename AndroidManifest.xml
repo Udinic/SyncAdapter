@@ -21,20 +21,20 @@
                        android:resource="@xml/authenticator" />
         </service>
 
-        <service
-                android:name=".syncadapter.UdinicSyncService"
-                android:exported="true">
-            <intent-filter>
-                <action
-                        android:name="android.content.SyncAdapter" />
-            </intent-filter>
-            <meta-data
-                    android:name="android.provider.CONTACTS_STRUCTURE"
-                    android:resource="@xml/contacts" />
-            <meta-data
-                    android:name="android.content.SyncAdapter"
-                    android:resource="@xml/sync_adapter" />
-        </service>
+        <!--<service-->
+                <!--android:name="com.udinic.syncadapter_example_app.syncadapter.UdinicSyncService"-->
+                <!--android:exported="true">-->
+            <!--<intent-filter>-->
+                <!--<action-->
+                        <!--android:name="android.content.SyncAdapter" />-->
+            <!--</intent-filter>-->
+            <!--<meta-data-->
+                    <!--android:name="android.provider.CONTACTS_STRUCTURE"-->
+                    <!--android:resource="@xml/contacts" />-->
+            <!--<meta-data-->
+                    <!--android:name="android.content.SyncAdapter"-->
+                    <!--android:resource="@xml/sync_adapter" />-->
+        <!--</service>-->
 
     </application>
 

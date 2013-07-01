@@ -1,13 +1,13 @@
-package com.udinic.sync_adapter_example.db;
+package com.udinic.syncadapter_example_app.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.udinic.sync_adapter_example.db.dao.TvShow;
+import com.udinic.syncadapter_example_app.db.dao.TvShow;
 
-import static com.udinic.sync_adapter_example.db.dao.TvShow.TABLE_NAME;
+import static com.udinic.syncadapter_example_app.db.dao.TvShow.TABLE_NAME;
 
 /**
  * Created by Udini on 6/22/13.

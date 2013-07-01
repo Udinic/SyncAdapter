@@ -1,4 +1,4 @@
-package com.udinic.syncadapter_example_ap;
+package com.udinic.syncadapter_example_app;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -11,10 +11,9 @@ import android.util.Log;
 
 import com.udinic.sync_adapter_example.authentication.AccountGeneral;
 import com.udinic.sync_adapter_example.authentication.ParseComServer;
-import com.udinic.sync_adapter_example.db.TvShowsContentProvider;
-import com.udinic.sync_adapter_example.db.UdinicDbHelper;
-import com.udinic.sync_adapter_example.db.dao.TvShow;
-import com.udinic.sync_adapter_example.db.dao.User;
+import com.udinic.syncadapter_example_app.db.TvShowsContract;
+import com.udinic.syncadapter_example_app.db.dao.TvShow;
+import com.udinic.syncadapter_example_app.db.dao.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,7 @@ public class Testing extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UdinicDbHelper dbHelper = new UdinicDbHelper(this);
+        com.udinic.sync_adapter_example.db.UdinicDbHelper dbHelper = new com.udinic.sync_adapter_example.db.UdinicDbHelper(this);
         mDb = dbHelper.getWritableDatabase();
 //        mDb.execSQL("DELETE FROM " + TABLE_NAME); //clean up the table
 
@@ -52,7 +51,7 @@ public class Testing extends Activity {
     }
 
     private List<TvShow> readFromContentProvider() {
-        Cursor curTvShows = getContentResolver().query(TvShowsContentProvider.CONTENT_URI, null, null, null, null);
+        Cursor curTvShows = getContentResolver().query(TvShowsContract.CONTENT_URI, null, null, null, null);
 
         ArrayList<TvShow> shows = new ArrayList<TvShow>();
 

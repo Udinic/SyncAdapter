@@ -1,4 +1,4 @@
-package com.udinic.sync_adapter_example.db;
+package com.udinic.syncadapter_example_app.db;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-import com.udinic.sync_adapter_example.db.dao.TvShow;
+import com.udinic.syncadapter_example_app.db.dao.TvShow;
 
 /**
  * Created by Udini on 6/22/13.
@@ -17,8 +17,11 @@ import com.udinic.sync_adapter_example.db.dao.TvShow;
 public class TvShowsContentProvider extends ContentProvider {
 
     public static final String AUTHORITY = "com.udinic.tvshows.provider";
-    private static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
     public static final UriMatcher URI_MATCHER = buildUriMatcher();
+    public static final String PATH = "tvshows";
+    public static final int PATH_TOKEN = 100;
+    public static final String PATH_FOR_ID = "tvshows/*";
+    public static final int PATH_FOR_ID_TOKEN = 200;
 
     // Uri Matcher for the content provider
     private static UriMatcher buildUriMatcher() {
@@ -31,20 +34,13 @@ public class TvShowsContentProvider extends ContentProvider {
 
     //TODO organize the code. Maybe write a Contract class?
     // Content Provider stuff
-    public static final String PATH = "tvshows";
-    public static final int PATH_TOKEN = 100;
-    public static final String PATH_FOR_ID = "tvshows/*";
-    public static final int PATH_FOR_ID_TOKEN = 200;
-    public static final Uri CONTENT_URI = BASE_URI.buildUpon().appendPath(PATH).build();
-    public static final String CONTENT_TYPE_DIR = "vnd.android.cursor.dir/vnd.udinic.tvshow";
-    public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.udinic.tvshow";
 
-    private UdinicDbHelper restaurantDb;
+    private com.udinic.sync_adapter_example.db.UdinicDbHelper restaurantDb;
 
     @Override
     public boolean onCreate() {
         Context ctx = getContext();
-        restaurantDb = new UdinicDbHelper(ctx);
+        restaurantDb = new com.udinic.sync_adapter_example.db.UdinicDbHelper(ctx);
         return true;
     }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.udinic.syncadapter_example_ap"
+          package="com.udinic.syncadapter_example_app"
           android:versionCode="1"
           android:versionName="1.0">
 
@@ -24,7 +24,7 @@
 
         <!-- W/O that, we'll get: "Failed to find provider info for com.udinic.tvshows.provider" -->
         <provider android:authorities="com.udinic.tvshows.provider"
-                  android:name="com.udinic.sync_adapter_example.db.TvShowsContentProvider"
+                  android:name=".db.TvShowsContentProvider"
                   android:exported="false"/>
 
         <!-- Authenticator related activities and service needs to be declared here in order for the app to recognize them-->
@@ -40,7 +40,7 @@
         </service>
 
         <service
-                android:name="com.udinic.sync_adapter_example.syncadapter.UdinicSyncService"
+                android:name=".syncadapter.UdinicSyncService"
                 android:exported="true">
             <intent-filter>
                 <action
@@ -54,7 +54,6 @@
                     android:resource="@xml/contacts" />
 
         </service>
-
     </application>
 
     <!-- client -->
