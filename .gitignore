@@ -8,6 +8,7 @@
 *.ipr
 *.class
 *.pyc
+*.apk
 /*/out
 /*/target
 .project
