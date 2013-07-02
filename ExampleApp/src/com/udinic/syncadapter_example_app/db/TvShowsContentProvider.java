@@ -35,12 +35,12 @@ public class TvShowsContentProvider extends ContentProvider {
     //TODO organize the code. Maybe write a Contract class?
     // Content Provider stuff
 
-    private com.udinic.sync_adapter_example.db.UdinicDbHelper restaurantDb;
+    private UdinicDbHelper restaurantDb;
 
     @Override
     public boolean onCreate() {
         Context ctx = getContext();
-        restaurantDb = new com.udinic.sync_adapter_example.db.UdinicDbHelper(ctx);
+        restaurantDb = new UdinicDbHelper(ctx);
         return true;
     }
 
@@ -49,9 +49,9 @@ public class TvShowsContentProvider extends ContentProvider {
         final int match = URI_MATCHER.match(uri);
         switch (match) {
             case PATH_TOKEN:
-                return CONTENT_TYPE_DIR;
+                return TvShowsContract.CONTENT_TYPE_DIR;
             case PATH_FOR_ID_TOKEN:
-                return CONTENT_ITEM_TYPE;
+                return TvShowsContract.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("URI " + uri + " is not supported.");
         }
@@ -65,7 +65,7 @@ public class TvShowsContentProvider extends ContentProvider {
             case PATH_TOKEN: {
                 long id = db.insert(TvShow.TABLE_NAME, null, values);
                 getContext().getContentResolver().notifyChange(uri, null);
-                return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
+                return TvShowsContract.CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
             }
             default: {
                 throw new UnsupportedOperationException("URI: " + uri + " not supported.");

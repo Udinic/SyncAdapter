@@ -12,6 +12,7 @@ import android.util.Log;
 import com.udinic.sync_adapter_example.authentication.AccountGeneral;
 import com.udinic.sync_adapter_example.authentication.ParseComServer;
 import com.udinic.syncadapter_example_app.db.TvShowsContract;
+import com.udinic.syncadapter_example_app.db.UdinicDbHelper;
 import com.udinic.syncadapter_example_app.db.dao.TvShow;
 import com.udinic.syncadapter_example_app.db.dao.User;
 
@@ -28,7 +29,7 @@ public class Testing extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        com.udinic.sync_adapter_example.db.UdinicDbHelper dbHelper = new com.udinic.sync_adapter_example.db.UdinicDbHelper(this);
+        UdinicDbHelper dbHelper = new UdinicDbHelper(this);
         mDb = dbHelper.getWritableDatabase();
 //        mDb.execSQL("DELETE FROM " + TABLE_NAME); //clean up the table
 
