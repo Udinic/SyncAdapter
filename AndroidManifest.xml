@@ -20,22 +20,6 @@
             <meta-data android:name="android.accounts.AccountAuthenticator"
                        android:resource="@xml/authenticator" />
         </service>
-
-        <!--<service-->
-                <!--android:name="com.udinic.syncadapter_example_app.syncadapter.UdinicSyncService"-->
-                <!--android:exported="true">-->
-            <!--<intent-filter>-->
-                <!--<action-->
-                        <!--android:name="android.content.SyncAdapter" />-->
-            <!--</intent-filter>-->
-            <!--<meta-data-->
-                    <!--android:name="android.provider.CONTACTS_STRUCTURE"-->
-                    <!--android:resource="@xml/contacts" />-->
-            <!--<meta-data-->
-                    <!--android:name="android.content.SyncAdapter"-->
-                    <!--android:resource="@xml/sync_adapter" />-->
-        <!--</service>-->
-
     </application>
 
     <!-- *** Not really needed here, but convenient for copying to other apps that will use this module *** -->

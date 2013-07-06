@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.udinic.syncadapter_example_app"
+          package="com.udinic.sync_adapter_example_app"
           android:versionCode="1"
           android:versionName="1.0">
 
@@ -22,15 +22,19 @@
             </intent-filter>
         </activity>
 
-        <!-- W/O that, we'll get: "Failed to find provider info for com.udinic.tvshows.provider" -->
+        <!--
+        Introducing our Content Provider.
+        W/O that, we'll get: "Failed to find provider info for com.udinic.tvshows.provider" -->
         <provider android:authorities="com.udinic.tvshows.provider"
                   android:name=".db.TvShowsContentProvider"
+                  android:label="@string/provider_name"
                   android:exported="false"/>
 
         <!-- Authenticator related activities and service needs to be declared here in order for the app to recognize them-->
         <activity android:name="com.udinic.sync_adapter_example.authentication.AuthenticatorActivity" android:label="@string/login_label"/>
         <activity android:name="com.udinic.sync_adapter_example.authentication.SignUpActivity" android:label="@string/signup_title"/>
 
+        <!-- Authenticator related service -->
         <service android:name="com.udinic.sync_adapter_example.authentication.UdinicAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
@@ -39,6 +43,7 @@
                        android:resource="@xml/authenticator" />
         </service>
 
+        <!-- Sync adapter related service -->
         <service
                 android:name=".syncadapter.UdinicSyncService"
                 android:exported="true">
@@ -49,9 +54,9 @@
             <meta-data
                     android:name="android.content.SyncAdapter"
                     android:resource="@xml/sync_adapter" />
-            <meta-data
-                    android:name="android.provider.CONTACTS_STRUCTURE"
-                    android:resource="@xml/contacts" />
+            <!--<meta-data-->
+                    <!--android:name="android.provider.CONTACTS_STRUCTURE"-->
+                    <!--android:resource="@xml/contacts" />-->
 
         </service>
     </application>

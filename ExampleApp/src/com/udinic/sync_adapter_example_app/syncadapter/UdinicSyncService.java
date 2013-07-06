@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.udinic.syncadapter_example_app.syncadapter;
+package com.udinic.sync_adapter_example_app.syncadapter;
 
 import android.app.Service;
 import android.content.Intent;
@@ -21,7 +21,7 @@ import android.os.IBinder;
 
 /**
  * Service to handle Account sync. This is invoked with an intent with action
- * ACTION_AUTHENTICATOR_INTENT. It instantiates the com.udinic.syncadapter_example_app.syncadapter and returns its
+ * ACTION_AUTHENTICATOR_INTENT. It instantiates the com.udinic.sync_adapter_example_app.syncadapter and returns its
  * IBinder.
  */
 public class UdinicSyncService extends Service {

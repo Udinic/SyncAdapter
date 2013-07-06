@@ -1,4 +1,4 @@
-package com.udinic.syncadapter_example_app.db.dao;
+package com.udinic.sync_adapter_example_app.db.dao;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -72,9 +72,6 @@ public class TvShow implements Serializable {
 
     @Override
     public String toString() {
-        return "TvShow{" +
-                "name='" + name + '\'' +
-                ", year=" + year +
-                '}';
+        return name + " (" + year + ")";
     }
 }

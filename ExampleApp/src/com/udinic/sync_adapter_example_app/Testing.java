@@ -1,4 +1,4 @@
-package com.udinic.syncadapter_example_app;
+package com.udinic.sync_adapter_example_app;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -11,10 +11,10 @@ import android.util.Log;
 
 import com.udinic.sync_adapter_example.authentication.AccountGeneral;
 import com.udinic.sync_adapter_example.authentication.ParseComServer;
-import com.udinic.syncadapter_example_app.db.TvShowsContract;
-import com.udinic.syncadapter_example_app.db.UdinicDbHelper;
-import com.udinic.syncadapter_example_app.db.dao.TvShow;
-import com.udinic.syncadapter_example_app.db.dao.User;
+import com.udinic.sync_adapter_example_app.db.TvShowsContract;
+import com.udinic.sync_adapter_example_app.db.UdinicDbHelper;
+import com.udinic.sync_adapter_example_app.db.dao.TvShow;
+import com.udinic.sync_adapter_example_app.db.dao.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +85,7 @@ public class Testing extends Activity {
             public void run() {
                 try {
                     User user = udini.userSignIn("qqq", "qqq", "");
-                    udini.putShow(user.getSessionToken(), user.getObjectId(), new TvShow("From Local3", 2012));
+//                    udini.putShow(user.getSessionToken(), user.getObjectId(), new TvShow("From Local3", 2012));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -108,9 +108,9 @@ public class Testing extends Activity {
                     final String authtoken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
 //                    User user = udini.userSignIn("qqq", "qqq", "");
 
-                    List<TvShow> shows = udini.getShows(authtoken);
-                    for (TvShow show : shows)
-                        Log.d("udini", "getFromWeb> show[" + show.toString() + "]");
+//                    List<TvShow> shows = udini.getShows(authtoken);
+//                    for (TvShow show : shows)
+//                        Log.d("udini", "getFromWeb> show[" + show.toString() + "]");
 
                 } catch (Exception e) {
                     e.printStackTrace();

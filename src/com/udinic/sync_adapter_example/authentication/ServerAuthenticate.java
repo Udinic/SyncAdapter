@@ -1,6 +1,6 @@
 package com.udinic.sync_adapter_example.authentication;
 
-import com.udinic.syncadapter_example_app.db.dao.User;
+import com.udinic.sync_adapter_example_app.db.dao.User;
 
 /**
  * User: udinic

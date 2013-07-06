@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.udinic.syncadapter_example_app.syncadapter;
+package com.udinic.sync_adapter_example_app.syncadapter;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -29,9 +29,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.udinic.sync_adapter_example.authentication.AccountGeneral;
-import com.udinic.sync_adapter_example.authentication.ParseComServer;
-import com.udinic.syncadapter_example_app.db.TvShowsContract;
-import com.udinic.syncadapter_example_app.db.dao.TvShow;
+import com.udinic.sync_adapter_example_app.db.TvShowsContract;
+import com.udinic.sync_adapter_example_app.db.dao.TvShow;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,10 +66,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         try {
             String authToken = mAccountManager.blockingGetAuthToken(account, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, false);
             String userObjectId = mAccountManager.getUserData(account, AccountGeneral.USERDATA_USER_OBJ_ID);
-//            String userObjectId = "A6onlmHup4"; //TODO mAccountManager.getUserData(account, AccountGeneral.USERDATA_USER_OBJ_ID);
 
             Log.d("udini", "onPerformSync> userObjId[" + userObjectId + "]");
-            ParseComServer parseService = new ParseComServer();
+            ParseComServerAccessor parseService = new ParseComServerAccessor();
             // Get shows from remote
             List<TvShow> remoteTvShows = parseService.getShows(authToken);
 

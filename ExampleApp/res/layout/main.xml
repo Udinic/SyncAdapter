@@ -6,28 +6,29 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <Button android:id="@+id/btnAddAccount"
+    <Button android:id="@+id/btnShowLocalList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="addAccount"/>
-
-    <Button android:id="@+id/btnGetAuthToken"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="getAuthToken"/>
+            android:text="Show local List"/>
 
     <Button android:id="@+id/btnGetAuthTokenConvenient"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:padding="10dp"
-            android:text="getAuthTokenByFeatures"/>
+            android:text="Connect"/>
 
-    <Button android:id="@+id/btnInvalidateAuthToken"
+    <Button android:id="@+id/btnShowRemoteList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="invalidateAuthToken"/>
+            android:text="Show remote List"/>
+
+    <Button android:id="@+id/btnSync"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Sync now"/>
 
 </LinearLayout>

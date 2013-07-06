@@ -21,7 +21,7 @@ public class AccountGeneral {
     /**
      * User data fields
      */
-    public static final String USERDATA_USER_OBJ_ID = "userObjectId";
+    public static final String USERDATA_USER_OBJ_ID = "userObjectId";   //Parse.com object id
 
     /**
      * Auth token types

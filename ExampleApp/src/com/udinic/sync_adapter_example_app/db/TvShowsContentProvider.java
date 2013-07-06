@@ -1,4 +1,4 @@
-package com.udinic.syncadapter_example_app.db;
+package com.udinic.sync_adapter_example_app.db;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -9,14 +9,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-import com.udinic.syncadapter_example_app.db.dao.TvShow;
+import com.udinic.sync_adapter_example_app.db.dao.TvShow;
+
+import static com.udinic.sync_adapter_example_app.db.TvShowsContract.AUTHORITY;
 
 /**
  * Created by Udini on 6/22/13.
  */
 public class TvShowsContentProvider extends ContentProvider {
 
-    public static final String AUTHORITY = "com.udinic.tvshows.provider";
     public static final UriMatcher URI_MATCHER = buildUriMatcher();
     public static final String PATH = "tvshows";
     public static final int PATH_TOKEN = 100;
@@ -32,15 +33,14 @@ public class TvShowsContentProvider extends ContentProvider {
         return matcher;
     }
 
-    //TODO organize the code. Maybe write a Contract class?
     // Content Provider stuff
 
-    private UdinicDbHelper restaurantDb;
+    private UdinicDbHelper dbHelper;
 
     @Override
     public boolean onCreate() {
         Context ctx = getContext();
-        restaurantDb = new UdinicDbHelper(ctx);
+        dbHelper = new UdinicDbHelper(ctx);
         return true;
     }
 
@@ -59,7 +59,7 @@ public class TvShowsContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        SQLiteDatabase db = restaurantDb.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         int token = URI_MATCHER.match(uri);
         switch (token) {
             case PATH_TOKEN: {
@@ -76,7 +76,7 @@ public class TvShowsContentProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        SQLiteDatabase db = restaurantDb.getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         final int match = URI_MATCHER.match(uri);
         switch (match) {
             // retrieve tv shows list
