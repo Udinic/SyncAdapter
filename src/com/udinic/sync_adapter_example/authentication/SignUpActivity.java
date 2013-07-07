@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.udinic.sync_adapter_example.R;
 import com.udinic.sync_adapter_example_app.db.dao.User;
 
+import static com.udinic.sync_adapter_example.authentication.AccountGeneral.USERDATA_USER_OBJ_ID;
 import static com.udinic.sync_adapter_example.authentication.AccountGeneral.sServerAuthenticate;
 import static com.udinic.sync_adapter_example.authentication.AuthenticatorActivity.ARG_ACCOUNT_TYPE;
 import static com.udinic.sync_adapter_example.authentication.AuthenticatorActivity.KEY_ERROR_MESSAGE;
@@ -78,6 +79,13 @@ public class SignUpActivity extends Activity {
                     data.putString(AccountManager.KEY_ACCOUNT_NAME, accountName);
                     data.putString(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
                     data.putString(AccountManager.KEY_AUTHTOKEN, authtoken);
+
+                    // We keep the user's object id as an extra data on the account.
+                    // It's used later for determine ACL for the data we send to the Parse.com service
+                    Bundle userData = new Bundle();
+                    userData.putString(USERDATA_USER_OBJ_ID, user.getObjectId());
+                    data.putBundle(AccountManager.KEY_USERDATA, userData);
+
                     data.putString(PARAM_USER_PASS, accountPassword);
                 } catch (Exception e) {
                     data.putString(KEY_ERROR_MESSAGE, e.getMessage());

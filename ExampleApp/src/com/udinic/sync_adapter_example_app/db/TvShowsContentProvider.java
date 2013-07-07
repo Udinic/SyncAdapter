@@ -9,8 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-import com.udinic.sync_adapter_example_app.db.dao.TvShow;
-
 import static com.udinic.sync_adapter_example_app.db.TvShowsContract.AUTHORITY;
 
 /**
@@ -63,7 +61,7 @@ public class TvShowsContentProvider extends ContentProvider {
         int token = URI_MATCHER.match(uri);
         switch (token) {
             case PATH_TOKEN: {
-                long id = db.insert(TvShow.TABLE_NAME, null, values);
+                long id = db.insert(UdinicDbHelper.TVSHOWS_TABLE_NAME, null, values);
                 getContext().getContentResolver().notifyChange(uri, null);
                 return TvShowsContract.CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
             }
@@ -82,7 +80,7 @@ public class TvShowsContentProvider extends ContentProvider {
             // retrieve tv shows list
             case PATH_TOKEN: {
                 SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-                builder.setTables(TvShow.TABLE_NAME);
+                builder.setTables(UdinicDbHelper.TVSHOWS_TABLE_NAME);
                 return builder.query(db, null, null, null, null, null, null);
             }
             default:

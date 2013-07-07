@@ -24,6 +24,9 @@ import com.udinic.sync_adapter_example_app.syncadapter.ParseComServerAccessor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import static java.lang.System.currentTimeMillis;
 
 /**
  * Created with IntelliJ IDEA.
@@ -87,7 +90,16 @@ public class Main1 extends Activity {
 
             @Override
             public void onClick(View view) {
+                String tvshowsNames[] = getResources().getStringArray(R.array.tvshows_names);
+                int tvshowsYears[] = getResources().getIntArray(R.array.tvshows_year);
+                int randIdx = new Random(currentTimeMillis()).nextInt(tvshowsNames.length);
 
+                // Creating a Tv Show data object, in order to use some of its convenient methods
+                TvShow tvShow = new TvShow(tvshowsNames[randIdx], tvshowsYears[randIdx]);
+                Log.d("udinic", "Tv Show to add [id="+randIdx+"]: " + tvShow.toString());
+
+                // Add our Tv show to the local data base
+                getContentResolver().insert(TvShowsContract.CONTENT_URI, tvShow.getContentValues());
             }
         });
 

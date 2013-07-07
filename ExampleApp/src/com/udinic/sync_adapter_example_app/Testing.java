@@ -31,7 +31,7 @@ public class Testing extends Activity {
         super.onCreate(savedInstanceState);
         UdinicDbHelper dbHelper = new UdinicDbHelper(this);
         mDb = dbHelper.getWritableDatabase();
-//        mDb.execSQL("DELETE FROM " + TABLE_NAME); //clean up the table
+//        mDb.execSQL("DELETE FROM " + TVSHOWS_TABLE_NAME); //clean up the table
 
 //        writeToDB(new TvShow("Local1", 3244));
 //        writeToDB(new TvShow("Local2", 8789));
@@ -48,7 +48,7 @@ public class Testing extends Activity {
     }
 
     private boolean writeToDB(TvShow tvShow) {
-        return mDb.insert(TvShow.TABLE_NAME, null, tvShow.getContentValues()) == 1;
+        return mDb.insert(UdinicDbHelper.TVSHOWS_TABLE_NAME, null, tvShow.getContentValues()) == 1;
     }
 
     private List<TvShow> readFromContentProvider() {
@@ -66,7 +66,7 @@ public class Testing extends Activity {
 
     }
     private List<TvShow> readFromDb() {
-        Cursor curTvShows = mDb.query(TvShow.TABLE_NAME, null, null, null, null, null, null);
+        Cursor curTvShows = mDb.query(UdinicDbHelper.TVSHOWS_TABLE_NAME, null, null, null, null, null, null);
         ArrayList<TvShow> shows = new ArrayList<TvShow>();
 
         while (curTvShows.moveToNext()) {
