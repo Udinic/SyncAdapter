@@ -12,6 +12,18 @@
             android:padding="10dp"
             android:text="Show local List"/>
 
+    <Button android:id="@+id/btnAddShow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Add TV show to local"/>
+
+    <Button android:id="@+id/btnClearLocalData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Clear local List"/>
+
     <Button android:id="@+id/btnGetAuthTokenConvenient"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

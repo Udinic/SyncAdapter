@@ -83,6 +83,14 @@ public class Main1 extends Activity {
             }
         });
 
+        findViewById(R.id.btnAddShow).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         findViewById(R.id.btnShowLocalList).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
