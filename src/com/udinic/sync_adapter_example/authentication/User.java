@@ -1,4 +1,4 @@
-package com.udinic.sync_adapter_example_app.db.dao;
+package com.udinic.sync_adapter_example.authentication;
 
 import java.io.Serializable;
 

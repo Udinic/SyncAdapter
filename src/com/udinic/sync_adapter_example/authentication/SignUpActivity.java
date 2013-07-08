@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.udinic.sync_adapter_example.R;
-import com.udinic.sync_adapter_example_app.db.dao.User;
 
 import static com.udinic.sync_adapter_example.authentication.AccountGeneral.USERDATA_USER_OBJ_ID;
 import static com.udinic.sync_adapter_example.authentication.AccountGeneral.sServerAuthenticate;

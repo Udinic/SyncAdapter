@@ -3,7 +3,6 @@ package com.udinic.sync_adapter_example.authentication;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.udinic.sync_adapter_example_app.db.dao.User;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -31,13 +30,14 @@ import java.util.List;
  * Date: 3/27/13
  * Time: 3:30 AM
  */
-public class ParseComServer implements ServerAuthenticate{
+public class ParseComServer implements ServerAuthenticate {
 
     private final static String APP_ID = "iRnc8I1X0du5q6HrJtZW0a5DlB0JcpOQbjA6chha";
     private final static String REST_API_KEY = "tv1xCdYKTwI3p205KHCn1yWpbVj2OHldV9cPZuNZ";
 
     /**
      * Return the basic headers to connect our app's parse.com details
+     *
      * @return
      */
     public static List<Header> getAppParseComHeaders() {
@@ -70,7 +70,7 @@ public class ParseComServer implements ServerAuthenticate{
 
             if (response.getStatusLine().getStatusCode() != 201) {
                 ParseComError error = new Gson().fromJson(responseString, ParseComError.class);
-                throw new Exception("Error creating user["+error.code+"] - " + error.error);
+                throw new Exception("Error creating user[" + error.code + "] - " + error.error);
             }
 
             User createdUser = new Gson().fromJson(responseString, User.class);
@@ -118,7 +118,7 @@ public class ParseComServer implements ServerAuthenticate{
             String responseString = EntityUtils.toString(response.getEntity());
             if (response.getStatusLine().getStatusCode() != 200) {
                 ParseComError error = new Gson().fromJson(responseString, ParseComError.class);
-                throw new Exception("Error signing-in ["+error.code+"] - " + error.error);
+                throw new Exception("Error signing-in [" + error.code + "] - " + error.error);
             }
 
             User loggedUser = new Gson().fromJson(responseString, User.class);

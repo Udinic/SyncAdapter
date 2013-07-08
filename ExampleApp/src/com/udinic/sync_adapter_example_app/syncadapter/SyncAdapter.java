@@ -60,18 +60,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority,
         ContentProviderClient provider, SyncResult syncResult) {
 
-        Log.d("udinic", TAG + "> onPerformSync account["+account.toString()+"]");
+        Log.d("udinic", TAG + "> onPerformSync for account["+account.name+"]");
 
         // TODO investigate third arg
         try {
             String authToken = mAccountManager.blockingGetAuthToken(account, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, false);
             String userObjectId = mAccountManager.getUserData(account, AccountGeneral.USERDATA_USER_OBJ_ID);
 
-            Log.d("udini", "onPerformSync> userObjId[" + userObjectId + "]");
             ParseComServerAccessor parseService = new ParseComServerAccessor();
+
+            Log.d("udinic", TAG + "> Get remote TV Shows");
             // Get shows from remote
             List<TvShow> remoteTvShows = parseService.getShows(authToken);
 
+            Log.d("udinic", TAG + "> Get local TV Shows");
             // Get shows from local
             ArrayList<TvShow> localTvShows = new ArrayList<TvShow>();
             Cursor curTvShows = getContext().getContentResolver().query(TvShowsContract.CONTENT_URI, null, null, null, null);
@@ -81,10 +83,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 }
                 curTvShows.close();
             }
-
-            // TODO REMOVE!
-//            localTvShows = new ArrayList<TvShow>();
-//            remoteTvShows = new ArrayList<TvShow>();
 
             // See what Local shows are missing on Remote
             ArrayList<TvShow> showsToRemote = new ArrayList<TvShow>();
@@ -100,20 +98,34 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     showsToLocal.add(remoteTvShow);
             }
 
-            // Updating remote tv shows
-            for (TvShow remoteTvShow : showsToRemote) {
-                Log.d("udinic", "Local -> Remote [" + remoteTvShow.name + "]");
-                parseService.putShow(authToken, userObjectId, remoteTvShow);
+            if (showsToRemote.size() == 0) {
+                Log.d("udinic", TAG + "> No local changes to update server");
+            } else {
+                Log.d("udinic", TAG + "> Updating remote server with local changes");
+
+                // Updating remote tv shows
+                for (TvShow remoteTvShow : showsToRemote) {
+                    Log.d("udinic", TAG + "> Local -> Remote [" + remoteTvShow.name + "]");
+                    parseService.putShow(authToken, userObjectId, remoteTvShow);
+                }
             }
 
-            // Updating local tv shows
-            int i=0;
-            ContentValues showsToLocalValues[] = new ContentValues[showsToLocal.size()];
-            for (TvShow localTvShow : showsToLocal) {
-                Log.d("udinic", "Remote -> Local [" + localTvShow.name + "]");
-                showsToLocalValues[i++] = localTvShow.getContentValues();
+            if (showsToLocal.size() == 0) {
+                Log.d("udinic", TAG + "> No server changes to update local database");
+            } else {
+                Log.d("udinic", TAG + "> Updating local database with remote changes");
+
+                // Updating local tv shows
+                int i=0;
+                ContentValues showsToLocalValues[] = new ContentValues[showsToLocal.size()];
+                for (TvShow localTvShow : showsToLocal) {
+                    Log.d("udinic", TAG + "> Remote -> Local [" + localTvShow.name + "]");
+                    showsToLocalValues[i++] = localTvShow.getContentValues();
+                }
+                getContext().getContentResolver().bulkInsert(TvShowsContract.CONTENT_URI, showsToLocalValues);
             }
-            getContext().getContentResolver().bulkInsert(TvShowsContract.CONTENT_URI, showsToLocalValues);
+
+            Log.d("udinic", TAG + "> Finished.");
 
         } catch (OperationCanceledException e) {
             e.printStackTrace();

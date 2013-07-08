@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.udinic.sync_adapter_example_app.db.dao.User;
-
 import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
 import static com.udinic.sync_adapter_example.authentication.AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS;
 import static com.udinic.sync_adapter_example.authentication.AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS_LABEL;

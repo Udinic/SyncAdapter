@@ -14,7 +14,7 @@ import com.udinic.sync_adapter_example.authentication.ParseComServer;
 import com.udinic.sync_adapter_example_app.db.TvShowsContract;
 import com.udinic.sync_adapter_example_app.db.UdinicDbHelper;
 import com.udinic.sync_adapter_example_app.db.dao.TvShow;
-import com.udinic.sync_adapter_example_app.db.dao.User;
+import com.udinic.sync_adapter_example.authentication.User;
 
 import java.util.ArrayList;
 import java.util.List;

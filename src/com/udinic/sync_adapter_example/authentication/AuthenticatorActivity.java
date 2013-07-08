@@ -12,16 +12,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.udinic.sync_adapter_example.R;
-import com.udinic.sync_adapter_example_app.db.dao.User;
 
 import static com.udinic.sync_adapter_example.authentication.AccountGeneral.USERDATA_USER_OBJ_ID;
 import static com.udinic.sync_adapter_example.authentication.AccountGeneral.sServerAuthenticate;
 
 /**
  * The Authenticator activity.
- *
+ * <p/>
  * Called by the Authenticator and in charge of identifing the user.
- *
+ * <p/>
  * It sends back to the Authenticator the result.
  */
 public class AuthenticatorActivity extends AccountAuthenticatorActivity {
@@ -57,7 +56,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             mAuthTokenType = AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS;
 
         if (accountName != null) {
-            ((TextView)findViewById(R.id.accountName)).setText(accountName);
+            ((TextView) findViewById(R.id.accountName)).setText(accountName);
         }
 
         findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
