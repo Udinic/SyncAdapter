@@ -34,13 +34,44 @@
     <Button android:id="@+id/btnShowRemoteList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:padding="10dp"
             android:text="Show remote List"/>
 
     <Button android:id="@+id/btnSync"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:padding="10dp"
             android:text="Sync now"/>
+
+    <Button
+            android:id="@+id/btnSyncSetting"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:padding="10dp"
+            android:text="Sync Setting"
+            />
+    <LinearLayout android:layout_width="match_parent"
+                  android:padding="10dp"
+                  android:layout_height="wrap_content">
+
+        <CheckBox
+                android:id="@+id/cbIsSyncable"
+                android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:enabled="false"
+                  android:text="IsSyncable"/>
+
+        <CheckBox android:layout_width="0dp"
+                android:id="@+id/cbAutoSync"
+                  android:layout_height="wrap_content"
+                  android:enabled="false"
+                  android:layout_weight="1"
+                  android:text="Auto-sync"/>
+      </LinearLayout>
+
 
 </LinearLayout>

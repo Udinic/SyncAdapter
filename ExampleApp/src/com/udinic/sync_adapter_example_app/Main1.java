@@ -9,12 +9,15 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.SyncStatusObserver;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.udinic.sync_adapter_example.authentication.AccountGeneral;
@@ -123,6 +126,13 @@ public class Main1 extends Activity {
          *       Account stuff
          */
 
+        findViewById(R.id.btnGetAuthTokenConvenient).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getTokenForAccountCreateIfNeeded(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
+            }
+        });
+
         findViewById(R.id.btnSync).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,41 +143,72 @@ public class Main1 extends Activity {
 
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true); // Performing a sync no matter if it's off
+                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_SETTINGS, true); // Performing a sync no matter if it's off
                 getContentResolver().requestSync(new Account(accountName, AccountGeneral.ACCOUNT_TYPE),
                         TvShowsContract.AUTHORITY, bundle);
             }
         });
 
-        findViewById(R.id.btnGetAuthTokenConvenient).setOnClickListener(new View.OnClickListener() {
+        ((CheckBox)findViewById(R.id.cbIsSyncable)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                getTokenForAccountCreateIfNeeded(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (accountName == null) {
+                    Toast.makeText(Main1.this, "Please connect first", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Setting the syncable state of the sync adapter
+                Account account = new Account(accountName, AccountGeneral.ACCOUNT_TYPE);
+                String authority = TvShowsContract.AUTHORITY;
+                ContentResolver.setIsSyncable(account,authority, isChecked ? 1 : 0);
             }
         });
 
-//        findViewById(R.id.btnAddAccount).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
-//            }
-//        });
-//
-//        findViewById(R.id.btnGetAuthToken).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showAccountPicker(AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, false);
-//            }
-//        });
+        ((CheckBox)findViewById(R.id.cbAutoSync)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (accountName == null) {
+                    Toast.makeText(Main1.this, "Please connect first", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-//
+                // Setting the autosync state of the sync adapter
+                Account account = new Account(accountName, AccountGeneral.ACCOUNT_TYPE);
+                String authority = TvShowsContract.AUTHORITY;
+                ContentResolver.setSyncAutomatically(account,authority, isChecked);
+            }
+        });
 
-//        findViewById(R.id.btnInvalidateAuthToken).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showAccountPicker(AUTHTOKEN_TYPE_FULL_ACCESS, true);
-//            }
-//        });
+        findViewById(R.id.btnSyncSetting).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                if (accountName == null) {
+                    Toast.makeText(Main1.this, "Please connect first", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                getContentResolver().addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE |
+                        ContentResolver.SYNC_OBSERVER_TYPE_PENDING |
+                        ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS, new SyncStatusObserver() {
+                    @Override
+                    public void onStatusChanged(int which) {
+                        Log.d("udinic", "SyncAdapter status change ["+which+"]");
+                    }
+                });
+
+                Account account = new Account(accountName, AccountGeneral.ACCOUNT_TYPE);
+                String authority = TvShowsContract.AUTHORITY;
+                ContentResolver.setIsSyncable(account,authority, 0);
+//                ContentResolver.setSyncAutomatically(account, authority,true);
+//                ContentResolver.addPeriodicSync(account,authority, new Bundle(), 10);
+
+//                ContentResolver.setIsSyncable(new Account(AccountGeneral.ACCOUNT_NAME, AccountGeneral.ACCOUNT_TYPE),
+//                        TvShowsContract.AUTHORITY, 1);
+//                getContentResolver().addPeriodicSync(new Account(AccountGeneral.ACCOUNT_NAME, AccountGeneral.ACCOUNT_TYPE),
+//                        TvShowsContract.AUTHORITY,null,);
+            }
+        });
     }
 
     private void showOnDialog(String title, List<TvShow> tvShows) {
@@ -182,6 +223,21 @@ public class Main1 extends Activity {
         }).show();
     }
 
+    private void initCheckboxes() {
+        Account account = new Account(accountName, AccountGeneral.ACCOUNT_TYPE);
+        String authority = TvShowsContract.AUTHORITY;
+
+        int isSyncable = ContentResolver.getIsSyncable(account, authority);
+        boolean autSync = ContentResolver.getSyncAutomatically(account, authority);
+
+        ((CheckBox)findViewById(R.id.cbIsSyncable)).setChecked(isSyncable > 0);
+        ((CheckBox)findViewById(R.id.cbAutoSync)).setChecked(autSync);
+
+        findViewById(R.id.cbIsSyncable).setEnabled(true);
+        findViewById(R.id.cbAutoSync).setEnabled(true);
+        findViewById(R.id.btnShowRemoteList).setEnabled(true);
+        findViewById(R.id.btnSync).setEnabled(true);
+    }
 
     private List<TvShow> readFromContentProvider() {
         Cursor curTvShows = getContentResolver().query(TvShowsContract.CONTENT_URI, null, null, null, null);
@@ -215,6 +271,7 @@ public class Main1 extends Activity {
                             bnd = future.getResult();
                             accountName = bnd.getString(AccountManager.KEY_ACCOUNT_NAME);
                             authToken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
+                            initCheckboxes();
                             showMessage(((authToken != null) ? "SUCCESS!\ntoken: " + authToken : "FAIL"));
                             Log.d("udinic", "GetTokenForAccount Bundle is " + bnd);
 
