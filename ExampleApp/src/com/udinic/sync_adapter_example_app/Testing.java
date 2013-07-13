@@ -11,10 +11,10 @@ import android.util.Log;
 
 import com.udinic.sync_adapter_example.authentication.AccountGeneral;
 import com.udinic.sync_adapter_example.authentication.ParseComServer;
-import com.udinic.sync_adapter_example_app.db.TvShowsContract;
-import com.udinic.sync_adapter_example_app.db.UdinicDbHelper;
-import com.udinic.sync_adapter_example_app.db.dao.TvShow;
 import com.udinic.sync_adapter_example.authentication.User;
+import com.udinic.sync_adapter_example_app.db.TvShowsContract;
+import com.udinic.sync_adapter_example_app.db.TvShowsDbHelper;
+import com.udinic.sync_adapter_example_app.db.dao.TvShow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class Testing extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UdinicDbHelper dbHelper = new UdinicDbHelper(this);
+        TvShowsDbHelper dbHelper = new TvShowsDbHelper(this);
         mDb = dbHelper.getWritableDatabase();
 //        mDb.execSQL("DELETE FROM " + TVSHOWS_TABLE_NAME); //clean up the table
 
@@ -38,7 +38,7 @@ public class Testing extends Activity {
 //        writeToDB(new TvShow("Local3", 789));
 //        getContentResolver().insert(TvShow.CONTENT_URI, new TvShow("New Show for Content Provider", 2013).getContentValues());
 //        putOnWeb();
-        getFromWeb();
+//        getFromWeb();
 //        putOnWebBulk();
 
         List<TvShow> shows = readFromContentProvider();
@@ -48,7 +48,7 @@ public class Testing extends Activity {
     }
 
     private boolean writeToDB(TvShow tvShow) {
-        return mDb.insert(UdinicDbHelper.TVSHOWS_TABLE_NAME, null, tvShow.getContentValues()) == 1;
+        return mDb.insert(TvShowsDbHelper.TVSHOWS_TABLE_NAME, null, tvShow.getContentValues()) == 1;
     }
 
     private List<TvShow> readFromContentProvider() {
@@ -66,7 +66,7 @@ public class Testing extends Activity {
 
     }
     private List<TvShow> readFromDb() {
-        Cursor curTvShows = mDb.query(UdinicDbHelper.TVSHOWS_TABLE_NAME, null, null, null, null, null, null);
+        Cursor curTvShows = mDb.query(TvShowsDbHelper.TVSHOWS_TABLE_NAME, null, null, null, null, null, null);
         ArrayList<TvShow> shows = new ArrayList<TvShow>();
 
         while (curTvShows.moveToNext()) {

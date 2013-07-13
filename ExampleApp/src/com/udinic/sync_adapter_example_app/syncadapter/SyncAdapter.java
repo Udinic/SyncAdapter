@@ -94,7 +94,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             // See what Remote shows are missing on Local
             ArrayList<TvShow> showsToLocal = new ArrayList<TvShow>();
             for (TvShow remoteTvShow : remoteTvShows) {
-                if (!localTvShows.contains(remoteTvShow))
+                if (!localTvShows.contains(remoteTvShow) && remoteTvShow.year != 1) // TODO REMOVE THIS
                     showsToLocal.add(remoteTvShow);
             }
 

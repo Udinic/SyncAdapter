@@ -8,7 +8,7 @@ import android.util.Log;
 /**
  * Created by Udini on 6/22/13.
  */
-public class UdinicDbHelper extends SQLiteOpenHelper {
+public class TvShowsDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "udinic.db";
     private static final int DATABASE_VERSION = 1;
@@ -29,7 +29,7 @@ public class UdinicDbHelper extends SQLiteOpenHelper {
             ");";
 
 
-    public UdinicDbHelper(Context context) {
+    public TvShowsDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -40,7 +40,7 @@ public class UdinicDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(UdinicDbHelper.class.getName(),
+        Log.w(TvShowsDbHelper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TVSHOWS_TABLE_NAME);

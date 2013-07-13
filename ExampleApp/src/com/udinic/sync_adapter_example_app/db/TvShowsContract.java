@@ -15,4 +15,8 @@ public class TvShowsContract {
     public static final String AUTHORITY = "com.udinic.tvshows.provider";
     // content://<authority>/<path to type>
     public static final Uri CONTENT_URI = Uri.parse("content://"+AUTHORITY+"/tvshows");
+
+    public static final String TV_SHOW_ID = "_id";
+    public static final String TV_SHOW_NAME = "name";
+    public static final String TV_SHOW_YEAR = "year";
 }

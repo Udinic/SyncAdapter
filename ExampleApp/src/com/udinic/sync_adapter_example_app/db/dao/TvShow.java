@@ -3,7 +3,7 @@ package com.udinic.sync_adapter_example_app.db.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.udinic.sync_adapter_example_app.db.UdinicDbHelper;
+import com.udinic.sync_adapter_example_app.db.TvShowsDbHelper;
 
 import java.io.Serializable;
 
@@ -32,15 +32,15 @@ public class TvShow implements Serializable {
      */
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
-        values.put(UdinicDbHelper.TVSHOWS_COL_NAME, name);
-        values.put(UdinicDbHelper.TVSHOWS_COL_YEAR, year);
+        values.put(TvShowsDbHelper.TVSHOWS_COL_NAME, name);
+        values.put(TvShowsDbHelper.TVSHOWS_COL_YEAR, year);
         return values;
     }
 
     // Create a TvShow object from a cursor
     public static TvShow fromCursor(Cursor curTvShows) {
-        String name = curTvShows.getString(curTvShows.getColumnIndex(UdinicDbHelper.TVSHOWS_COL_NAME));
-        int year = curTvShows.getInt(curTvShows.getColumnIndex(UdinicDbHelper.TVSHOWS_COL_YEAR));
+        String name = curTvShows.getString(curTvShows.getColumnIndex(TvShowsDbHelper.TVSHOWS_COL_NAME));
+        int year = curTvShows.getInt(curTvShows.getColumnIndex(TvShowsDbHelper.TVSHOWS_COL_YEAR));
 
         return new TvShow(name, year);
     }
