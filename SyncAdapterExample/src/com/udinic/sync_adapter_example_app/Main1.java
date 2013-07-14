@@ -9,6 +9,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.SyncStatusObserver;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,8 +18,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.udinic.sync_adapter_example.R;
 import com.udinic.sync_adapter_example.authentication.AccountGeneral;
 import com.udinic.sync_adapter_example_app.db.TvShowsContract;
 import com.udinic.sync_adapter_example_app.db.dao.TvShow;
@@ -42,6 +45,31 @@ public class Main1 extends Activity {
     private AccountManager mAccountManager;
     private String authToken = null;
     private Account mConnectedAccount;
+
+    SyncStatusObserver syncObserver = new SyncStatusObserver() {
+        @Override
+        public void onStatusChanged(final int which) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshSyncStatus();
+                }
+            });
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE |
+                ContentResolver.SYNC_OBSERVER_TYPE_PENDING, syncObserver);
+    }
+
+    @Override
+    protected void onPause() {
+        ContentResolver.removeStatusChangeListener(syncObserver);
+        super.onStop();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +189,15 @@ public class Main1 extends Activity {
         findViewById(R.id.btnTest).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Account account = mAccountManager.getAccountsByType("com.google")[0];
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true); // Performing a sync no matter if it's off
+                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_SETTINGS, true); // Performing a sync no matter if it's off
+                getContentResolver().requestSync(account, "com.android.contacts", bundle);
+
+
 //                ContentResolver.removePeriodicSync(mConnectedAccount, TvShowsContract.AUTHORITY, new Bundle());
 //                ContentResolver.addPeriodicSync(mConnectedAccount, TvShowsContract.AUTHORITY, new Bundle(), 60*60);
             }
@@ -238,6 +275,20 @@ public class Main1 extends Activity {
         }).show();
     }
 
+    private void refreshSyncStatus() {
+        String status;
+
+        if (ContentResolver.isSyncActive(mConnectedAccount, TvShowsContract.AUTHORITY))
+            status = "Status: Syncing..";
+        else if (ContentResolver.isSyncPending(mConnectedAccount, TvShowsContract.AUTHORITY))
+            status = "Status: Pending..";
+        else
+            status = "Status: Idle";
+
+        ((TextView) findViewById(R.id.status)).setText(status);
+        Log.d("udinic", "refreshSyncStatus> " + status);
+    }
+
     private void initButtonsAfterConnect() {
         String authority = TvShowsContract.AUTHORITY;
 
@@ -250,9 +301,12 @@ public class Main1 extends Activity {
 
         findViewById(R.id.cbIsSyncable).setEnabled(true);
         findViewById(R.id.cbAutoSync).setEnabled(true);
+        findViewById(R.id.status).setEnabled(true);
         findViewById(R.id.btnShowRemoteList).setEnabled(true);
         findViewById(R.id.btnSync).setEnabled(true);
         findViewById(R.id.btnConnect).setEnabled(false);
+
+        refreshSyncStatus();
     }
 
     private List<TvShow> readFromContentProvider() {
