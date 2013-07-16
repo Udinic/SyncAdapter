@@ -58,16 +58,18 @@ public class Main1 extends Activity {
         }
     };
 
+    Object handleSyncObserver;
     @Override
     protected void onResume() {
         super.onResume();
-        ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE |
+        handleSyncObserver = ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE |
                 ContentResolver.SYNC_OBSERVER_TYPE_PENDING, syncObserver);
     }
 
     @Override
     protected void onPause() {
-        ContentResolver.removeStatusChangeListener(syncObserver);
+        if (handleSyncObserver != null)
+            ContentResolver.removeStatusChangeListener(handleSyncObserver);
         super.onStop();
     }
 
@@ -181,7 +183,7 @@ public class Main1 extends Activity {
 
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true); // Performing a sync no matter if it's off
-                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_SETTINGS, true); // Performing a sync no matter if it's off
+                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true); // Performing a sync no matter if it's off
                 getContentResolver().requestSync(mConnectedAccount, TvShowsContract.AUTHORITY, bundle);
             }
         });
@@ -190,12 +192,15 @@ public class Main1 extends Activity {
             @Override
             public void onClick(View v) {
 
-                Account account = mAccountManager.getAccountsByType("com.google")[0];
+//                invalidateAuthToken(new Account("udi@udinic.com", AccountGeneral.ACCOUNT_TYPE), AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
 
-                Bundle bundle = new Bundle();
-                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true); // Performing a sync no matter if it's off
-                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_SETTINGS, true); // Performing a sync no matter if it's off
-                getContentResolver().requestSync(account, "com.android.contacts", bundle);
+//                ContentResolver.cancelSync(mConnectedAccount, TvShowsContract.AUTHORITY);
+
+//                Account account = mAccountManager.getAccountsByType("com.google")[0];
+//                Bundle bundle = new Bundle();
+//                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true); // Performing a sync no matter if it's off
+//                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_SETTINGS, true); // Performing a sync no matter if it's off
+//                getContentResolver().requestSync(account, "com.android.contacts", bundle);
 
 
 //                ContentResolver.removePeriodicSync(mConnectedAccount, TvShowsContract.AUTHORITY, new Bundle());
