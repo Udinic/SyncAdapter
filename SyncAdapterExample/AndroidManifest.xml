@@ -53,19 +53,14 @@
 
         <!-- Sync adapter related service -->
         <service
-                android:name=".syncadapter.UdinicSyncService"
+                android:name=".syncadapter.TvShowsSyncService"
                 android:exported="true">
             <intent-filter>
-                <action
-                        android:name="android.content.SyncAdapter" />
+                <action android:name="android.content.SyncAdapter" />
             </intent-filter>
             <meta-data
                     android:name="android.content.SyncAdapter"
                     android:resource="@xml/sync_adapter" />
-            <!--<meta-data-->
-                    <!--android:name="android.provider.CONTACTS_STRUCTURE"-->
-                    <!--android:resource="@xml/contacts" />-->
-
         </service>
     </application>
 

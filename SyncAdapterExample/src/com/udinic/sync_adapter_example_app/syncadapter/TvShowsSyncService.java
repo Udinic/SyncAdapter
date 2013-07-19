@@ -24,18 +24,16 @@ import android.os.IBinder;
  * ACTION_AUTHENTICATOR_INTENT. It instantiates the com.udinic.sync_adapter_example_app.syncadapter and returns its
  * IBinder.
  */
-public class UdinicSyncService extends Service {
+public class TvShowsSyncService extends Service {
 
     private static final Object sSyncAdapterLock = new Object();
-
-    private static SyncAdapter sSyncAdapter = null;
+    private static TvShowsSyncAdapter sSyncAdapter = null;
 
     @Override
     public void onCreate() {
         synchronized (sSyncAdapterLock) {
-            if (sSyncAdapter == null) {
-                sSyncAdapter = new SyncAdapter(getApplicationContext(), true);
-            }
+            if (sSyncAdapter == null)
+                sSyncAdapter = new TvShowsSyncAdapter(getApplicationContext(), true);
         }
     }
 

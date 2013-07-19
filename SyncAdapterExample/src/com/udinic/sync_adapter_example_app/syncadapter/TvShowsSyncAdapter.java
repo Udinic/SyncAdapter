@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.udinic.sync_adapter_example.authentication.AccountGeneral;
+import com.udinic.sync_adapter_example.authentication.User;
 import com.udinic.sync_adapter_example_app.db.TvShowsContract;
 import com.udinic.sync_adapter_example_app.db.dao.TvShow;
 
@@ -37,22 +38,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * SyncAdapter implementation for syncing sample SyncAdapter contacts to the
+ * TvShowsSyncAdapter implementation for syncing sample TvShowsSyncAdapter contacts to the
  * platform ContactOperations provider.  This sample shows a basic 2-way
  * sync between the client and a sample server.  It also contains an
  * example of how to update the contacts' status messages, which
  * would be useful for a messaging or social networking client.
  */
-public class SyncAdapter extends AbstractThreadedSyncAdapter {
+public class TvShowsSyncAdapter extends AbstractThreadedSyncAdapter {
 
-    private static final String TAG = "SyncAdapter";
+    private static final String TAG = "TvShowsSyncAdapter";
 
     private final AccountManager mAccountManager;
-    private final Context mContext;
 
-    public SyncAdapter(Context context, boolean autoInitialize) {
+    public TvShowsSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-        mContext = context;
         mAccountManager = AccountManager.get(context);
     }
 
@@ -62,21 +61,24 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         Log.d("udinic", TAG + "> onPerformSync for account["+account.name+"]");
 
-        // TODO investigate third arg
         try {
-            String authToken = mAccountManager.blockingGetAuthToken(account, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, true);
-            String userObjectId = mAccountManager.getUserData(account, AccountGeneral.USERDATA_USER_OBJ_ID);
+            // Get the auth token for the current account and
+            // the userObjectId, needed for creating items on Parse.com account
+            String authToken = mAccountManager.blockingGetAuthToken(account,
+                    AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, true);
+            String userObjectId = mAccountManager.getUserData(account,
+                    AccountGeneral.USERDATA_USER_OBJ_ID);
 
-            ParseComServerAccessor parseService = new ParseComServerAccessor();
+            ParseComServerAccessor parseComService = new ParseComServerAccessor();
 
             Log.d("udinic", TAG + "> Get remote TV Shows");
             // Get shows from remote
-            List<TvShow> remoteTvShows = parseService.getShows(authToken);
+            List<TvShow> remoteTvShows = parseComService.getShows(authToken);
 
             Log.d("udinic", TAG + "> Get local TV Shows");
             // Get shows from local
             ArrayList<TvShow> localTvShows = new ArrayList<TvShow>();
-            Cursor curTvShows = getContext().getContentResolver().query(TvShowsContract.CONTENT_URI, null, null, null, null);
+            Cursor curTvShows = provider.query(TvShowsContract.CONTENT_URI, null, null, null, null);
             if (curTvShows != null) {
                 while (curTvShows.moveToNext()) {
                     localTvShows.add(TvShow.fromCursor(curTvShows));
@@ -106,7 +108,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 // Updating remote tv shows
                 for (TvShow remoteTvShow : showsToRemote) {
                     Log.d("udinic", TAG + "> Local -> Remote [" + remoteTvShow.name + "]");
-                    parseService.putShow(authToken, userObjectId, remoteTvShow);
+                    parseComService.putShow(authToken, userObjectId, remoteTvShow);
                 }
             }
 
@@ -122,7 +124,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     Log.d("udinic", TAG + "> Remote -> Local [" + localTvShow.name + "]");
                     showsToLocalValues[i++] = localTvShow.getContentValues();
                 }
-                getContext().getContentResolver().bulkInsert(TvShowsContract.CONTENT_URI, showsToLocalValues);
+                provider.bulkInsert(TvShowsContract.CONTENT_URI, showsToLocalValues);
             }
 
             Log.d("udinic", TAG + "> Finished.");
@@ -130,12 +132,58 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         } catch (OperationCanceledException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            syncResult.stats.numIoExceptions++;
             e.printStackTrace();
         } catch (AuthenticatorException e) {
+            syncResult.stats.numAuthExceptions++;
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public int lifetimeSyncs;
+
+//    @Override
+    public void onPerformSync2(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+        List<User> users;
+        String authtoken = null;
+
+        try {
+            // use the account manager to request the credentials
+            authtoken = mAccountManager.blockingGetAuthToken(account, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, true );
+            // fetch updates from the sample service over the cloud
+            //users = NetworkUtilities.fetchFriendUpdates(account, authtoken, mLastUpdated);
+            // update the last synced date.
+//            mLastUpdated = new Date();
+            // update platform contacts.
+            Log.d(TAG, "Calling contactManager's sync contacts");
+            //ContactManager.syncContacts(mContext, account.name, users);
+            // fetch and update status messages for all the synced users.
+            //statuses = NetworkUtilities.fetchFriendStatuses(account, authtoken);
+            //ContactManager.insertStatuses(mContext, account.name, statuses);
+
+            if (lifetimeSyncs-- <= 0 ){
+                //mAccountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, authtoken);
+                syncResult.stats.numConflictDetectedExceptions++;
+                //syncResult.delayUntil = 60;
+                lifetimeSyncs = 2;
+            }
+
+
+        } catch (final AuthenticatorException e) {
+            syncResult.stats.numParseExceptions++;
+            Log.e(TAG, "AuthenticatorException", e);
+        } catch (final OperationCanceledException e) {
+            Log.e(TAG, "OperationCanceledExcetpion", e);
+        } catch (final IOException e) {
+            Log.e(TAG, "IOException", e);
+            Log.d(TAG, extras.toString());
+            syncResult.stats.numAuthExceptions++;
+            syncResult.delayUntil = 60;
+            //extras.putString(AccountManager.KEY_AUTH_FAILED_MESSAGE, "You're not registered");
+        }
+
     }
 
 }

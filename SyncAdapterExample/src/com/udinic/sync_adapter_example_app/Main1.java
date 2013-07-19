@@ -250,7 +250,7 @@ public class Main1 extends Activity {
 //                        ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS, new SyncStatusObserver() {
 //                    @Override
 //                    public void onStatusChanged(int which) {
-//                        Log.d("udinic", "SyncAdapter status change ["+which+"]");
+//                        Log.d("udinic", "TvShowsSyncAdapter status change ["+which+"]");
 //                    }
 //                });
 //
