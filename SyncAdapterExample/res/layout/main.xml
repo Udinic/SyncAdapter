@@ -55,14 +55,7 @@
                 android:padding="10dp"
                 android:text="Sync now"/>
 
-        <Button
-                android:id="@+id/btnTest"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Testings"/>
-
-        <RelativeLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:id="@+id/accountStatus"
                 android:padding="10dp"

@@ -29,7 +29,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.udinic.sync_adapter_example.authentication.AccountGeneral;
-import com.udinic.sync_adapter_example.authentication.User;
 import com.udinic.sync_adapter_example_app.db.TvShowsContract;
 import com.udinic.sync_adapter_example_app.db.dao.TvShow;
 
@@ -59,7 +58,15 @@ public class TvShowsSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority,
         ContentProviderClient provider, SyncResult syncResult) {
 
-        Log.d("udinic", TAG + "> onPerformSync for account["+account.name+"]");
+        // Building a print of the extras we got
+        StringBuilder sb = new StringBuilder();
+        if (extras != null) {
+            for (String key : extras.keySet()) {
+                sb.append(key + "[" + extras.get(key) + "] ");
+            }
+        }
+
+        Log.d("udinic", TAG + "> onPerformSync for account[" + account.name + "]. Extras: "+sb.toString());
 
         try {
             // Get the auth token for the current account and
@@ -118,7 +125,7 @@ public class TvShowsSyncAdapter extends AbstractThreadedSyncAdapter {
                 Log.d("udinic", TAG + "> Updating local database with remote changes");
 
                 // Updating local tv shows
-                int i=0;
+                int i = 0;
                 ContentValues showsToLocalValues[] = new ContentValues[showsToLocal.size()];
                 for (TvShow localTvShow : showsToLocal) {
                     Log.d("udinic", TAG + "> Remote -> Local [" + localTvShow.name + "]");
@@ -141,50 +148,5 @@ public class TvShowsSyncAdapter extends AbstractThreadedSyncAdapter {
             e.printStackTrace();
         }
     }
-
-    public int lifetimeSyncs;
-
-//    @Override
-    public void onPerformSync2(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        List<User> users;
-        String authtoken = null;
-
-        try {
-            // use the account manager to request the credentials
-            authtoken = mAccountManager.blockingGetAuthToken(account, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, true );
-            // fetch updates from the sample service over the cloud
-            //users = NetworkUtilities.fetchFriendUpdates(account, authtoken, mLastUpdated);
-            // update the last synced date.
-//            mLastUpdated = new Date();
-            // update platform contacts.
-            Log.d(TAG, "Calling contactManager's sync contacts");
-            //ContactManager.syncContacts(mContext, account.name, users);
-            // fetch and update status messages for all the synced users.
-            //statuses = NetworkUtilities.fetchFriendStatuses(account, authtoken);
-            //ContactManager.insertStatuses(mContext, account.name, statuses);
-
-            if (lifetimeSyncs-- <= 0 ){
-                //mAccountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, authtoken);
-                syncResult.stats.numConflictDetectedExceptions++;
-                //syncResult.delayUntil = 60;
-                lifetimeSyncs = 2;
-            }
-
-
-        } catch (final AuthenticatorException e) {
-            syncResult.stats.numParseExceptions++;
-            Log.e(TAG, "AuthenticatorException", e);
-        } catch (final OperationCanceledException e) {
-            Log.e(TAG, "OperationCanceledExcetpion", e);
-        } catch (final IOException e) {
-            Log.e(TAG, "IOException", e);
-            Log.d(TAG, extras.toString());
-            syncResult.stats.numAuthExceptions++;
-            syncResult.delayUntil = 60;
-            //extras.putString(AccountManager.KEY_AUTH_FAILED_MESSAGE, "You're not registered");
-        }
-
-    }
-
 }
 

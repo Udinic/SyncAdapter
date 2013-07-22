@@ -39,7 +39,7 @@ import static java.lang.System.currentTimeMillis;
  * Date: 21/03/13
  * Time: 13:50
  */
-public class Main1 extends Activity {
+public class Main extends Activity {
 
     private String TAG = this.getClass().getSimpleName();
     private AccountManager mAccountManager;
@@ -85,11 +85,11 @@ public class Main1 extends Activity {
             public void onClick(View v) {
                 new AsyncTask<Void, Void, List<TvShow>>() {
 
-                    ProgressDialog progressDialog = new ProgressDialog(Main1.this);
+                    ProgressDialog progressDialog = new ProgressDialog(Main.this);
                     @Override
                     protected void onPreExecute() {
                         if (authToken == null) {
-                            Toast.makeText(Main1.this, "Please connect first", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Main.this, "Please connect first", Toast.LENGTH_SHORT).show();
                             cancel(true);
                         } else {
                             progressDialog.show();
@@ -133,7 +133,7 @@ public class Main1 extends Activity {
                 // Add our Tv show to the local data base. This normally should be done on a background thread
                 getContentResolver().insert(TvShowsContract.CONTENT_URI, tvShow.getContentValues());
 
-                Toast.makeText(Main1.this, "Added \"" + tvShow.toString() + "\"", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Main.this, "Added \"" + tvShow.toString() + "\"", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -141,8 +141,8 @@ public class Main1 extends Activity {
             @Override
             public void onClick(View v) {
                 List<TvShow> list = readFromContentProvider();
-                AlertDialog.Builder builder = new AlertDialog.Builder(Main1.this);
-                builder.setAdapter(new ArrayAdapter<TvShow>(Main1.this, android.R.layout.simple_list_item_1, list),null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
+                builder.setAdapter(new ArrayAdapter<TvShow>(Main.this, android.R.layout.simple_list_item_1, list),null);
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -157,7 +157,7 @@ public class Main1 extends Activity {
             public void onClick(View v) {
                 // Deleteing all the TV Shows on the DB. This normally should be done on a background thread
                 int numDeleted = getContentResolver().delete(TvShowsContract.CONTENT_URI, null, null);
-                Toast.makeText(Main1.this, "Deleted " + numDeleted + " TV shows from the local list", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Main.this, "Deleted " + numDeleted + " TV shows from the local list", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -177,34 +177,14 @@ public class Main1 extends Activity {
             @Override
             public void onClick(View view) {
                 if (mConnectedAccount == null) {
-                    Toast.makeText(Main1.this, "Please connect first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Main.this, "Please connect first", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true); // Performing a sync no matter if it's off
                 bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true); // Performing a sync no matter if it's off
-                getContentResolver().requestSync(mConnectedAccount, TvShowsContract.AUTHORITY, bundle);
-            }
-        });
-
-        findViewById(R.id.btnTest).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-//                invalidateAuthToken(new Account("udi@udinic.com", AccountGeneral.ACCOUNT_TYPE), AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
-
-//                ContentResolver.cancelSync(mConnectedAccount, TvShowsContract.AUTHORITY);
-
-//                Account account = mAccountManager.getAccountsByType("com.google")[0];
-//                Bundle bundle = new Bundle();
-//                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true); // Performing a sync no matter if it's off
-//                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_SETTINGS, true); // Performing a sync no matter if it's off
-//                getContentResolver().requestSync(account, "com.android.contacts", bundle);
-
-
-//                ContentResolver.removePeriodicSync(mConnectedAccount, TvShowsContract.AUTHORITY, new Bundle());
-//                ContentResolver.addPeriodicSync(mConnectedAccount, TvShowsContract.AUTHORITY, new Bundle(), 60*60);
+                ContentResolver.requestSync(mConnectedAccount, TvShowsContract.AUTHORITY, bundle);
             }
         });
 
@@ -212,7 +192,7 @@ public class Main1 extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (mConnectedAccount == null) {
-                    Toast.makeText(Main1.this, "Please connect first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Main.this, "Please connect first", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -226,7 +206,7 @@ public class Main1 extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (mConnectedAccount == null) {
-                    Toast.makeText(Main1.this, "Please connect first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Main.this, "Please connect first", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -235,43 +215,12 @@ public class Main1 extends Activity {
                 ContentResolver.setSyncAutomatically(mConnectedAccount,authority, isChecked);
             }
         });
-
-//        findViewById(R.id.btnSyncSetting).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                if (accountName == null) {
-//                    Toast.makeText(Main1.this, "Please connect first", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                getContentResolver().addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE |
-//                        ContentResolver.SYNC_OBSERVER_TYPE_PENDING |
-//                        ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS, new SyncStatusObserver() {
-//                    @Override
-//                    public void onStatusChanged(int which) {
-//                        Log.d("udinic", "TvShowsSyncAdapter status change ["+which+"]");
-//                    }
-//                });
-//
-//                Account account = new Account(accountName, AccountGeneral.ACCOUNT_TYPE);
-//                String authority = TvShowsContract.AUTHORITY;
-//                ContentResolver.setIsSyncable(account,authority, 0);
-////                ContentResolver.setSyncAutomatically(account, authority,true);
-////                ContentResolver.addPeriodicSync(account,authority, new Bundle(), 10);
-//
-////                ContentResolver.setIsSyncable(new Account(AccountGeneral.ACCOUNT_NAME, AccountGeneral.ACCOUNT_TYPE),
-////                        TvShowsContract.AUTHORITY, 1);
-////                getContentResolver().addPeriodicSync(new Account(AccountGeneral.ACCOUNT_NAME, AccountGeneral.ACCOUNT_TYPE),
-////                        TvShowsContract.AUTHORITY,null,);
-//            }
-//        });
     }
 
     private void showOnDialog(String title, List<TvShow> tvShows) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(Main1.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
         builder.setTitle(title);
-        builder.setAdapter(new ArrayAdapter<TvShow>(Main1.this, android.R.layout.simple_list_item_1, tvShows),null);
+        builder.setAdapter(new ArrayAdapter<TvShow>(Main.this, android.R.layout.simple_list_item_1, tvShows),null);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -343,10 +292,12 @@ public class Main1 extends Activity {
                         Bundle bnd = null;
                         try {
                             bnd = future.getResult();
-                            String accountName = bnd.getString(AccountManager.KEY_ACCOUNT_NAME);
-                            mConnectedAccount = new Account(accountName, AccountGeneral.ACCOUNT_TYPE);
                             authToken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
-                            initButtonsAfterConnect();
+                            if (authToken != null) {
+                                String accountName = bnd.getString(AccountManager.KEY_ACCOUNT_NAME);
+                                mConnectedAccount = new Account(accountName, AccountGeneral.ACCOUNT_TYPE);
+                                initButtonsAfterConnect();
+                            }
                             showMessage(((authToken != null) ? "SUCCESS!\ntoken: " + authToken : "FAIL"));
                             Log.d("udinic", "GetTokenForAccount Bundle is " + bnd);
 
