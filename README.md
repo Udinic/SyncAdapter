@@ -1,7 +1,10 @@
 Sync Adapter
 ========================
 
-* WORK IN PROGRESS *
+A sample app to deomnstrate the use of Sync Adapters.
+
+![screenshots](https://raw.github.com/Udinic/AccountAuthenticator/master/screenshots/sampleapp.png)
+
 
 Developed By
 ============
