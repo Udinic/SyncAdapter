@@ -3,7 +3,7 @@ Sync Adapter
 
 A sample app to deomnstrate the use of Sync Adapters.
 
-![screenshots](https://raw.github.com/Udinic/AccountAuthenticator/master/screenshots/sampleapp.png)
+![screenshots](https://raw.github.com/Udinic/SyncAdapter/master/screenshots/sampleapp.png)
 
 
 Developed By
