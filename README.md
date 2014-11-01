@@ -1,7 +1,7 @@
 Sync Adapter
 ========================
 
-A sample app to deomnstrate the use of Sync Adapters.
+A sample app to demonstrate the use of Sync Adapters.
 
 A full explenation sync adapters and this app is on my blog post: http://udinic.wordpress.com/2013/07/24/write-your-own-android-sync-adapter/.
 
